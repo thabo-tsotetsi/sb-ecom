@@ -13,7 +13,7 @@ public class AuthUtil {
 
     @Autowired
     UserRepository userRepository;
-        // these are methods that assist with getting the information of the logged in user
+
     public String loggedInEmail(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByUserName(authentication.getName())
