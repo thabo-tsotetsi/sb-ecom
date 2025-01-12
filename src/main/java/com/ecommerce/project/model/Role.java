@@ -12,13 +12,14 @@ import lombok.ToString;
 @Data
 @Table(name = "roles")
 public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     private Integer roleId;
-    //Added the enum annotation so  the enum can be written as a string not an integer
-    @Enumerated(EnumType.STRING)
+
     @ToString.Exclude
+    @Enumerated(EnumType.STRING)
     @Column(length = 20, name = "role_name")
     private AppRole roleName;
 

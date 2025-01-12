@@ -16,28 +16,4 @@ public class CategoryResponse {
     private Long totalElements;
     private Integer totalPages;
     private boolean lastPage;
-
-    public void setContent(List<CategoryDTO> content) {
-        this.content = content;
-    }
-
-    public void setPageNumber(Integer pageNumber) {
-        this.pageNumber = pageNumber;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public void setTotalElements(Long totalElements) {
-        this.totalElements = totalElements;
-    }
-
-    public void setTotalPages(Integer totalPages) {
-        this.totalPages = totalPages;
-    }
-
-    public void setLastPage(boolean lastPage) {
-        this.lastPage = lastPage;
-    }
 }

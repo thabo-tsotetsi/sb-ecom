@@ -3,8 +3,8 @@ package com.ecommerce.project.controller;
 import com.ecommerce.project.model.AppRole;
 import com.ecommerce.project.model.Role;
 import com.ecommerce.project.model.User;
-import com.ecommerce.project.repository.RoleRepository;
-import com.ecommerce.project.repository.UserRepository;
+import com.ecommerce.project.repositories.RoleRepository;
+import com.ecommerce.project.repositories.UserRepository;
 import com.ecommerce.project.security.jwt.JwtUtils;
 import com.ecommerce.project.security.request.LoginRequest;
 import com.ecommerce.project.security.request.SignupRequest;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 @RestController
 @RequestMapping("/api/auth")
@@ -65,14 +64,14 @@ public class AuthController {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        //ResponseCookie jwtToken = jwtUtils.generateJwtCookie(userDetails);
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        UserInfoResponse response = new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), roles);
+        UserInfoResponse response = new UserInfoResponse(userDetails.getId(),
+                userDetails.getUsername(), roles, jwtCookie.toString());
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,
                 jwtCookie.toString())
@@ -131,22 +130,25 @@ public class AuthController {
     }
 
     @GetMapping("/username")
-    public String currentUsername(Authentication authentication){
-        if(authentication != null){
+    public String currentUserName(Authentication authentication){
+        if (authentication != null)
             return authentication.getName();
-        }else{
+        else
             return "";
-        }
     }
 
+
     @GetMapping("/user")
-    //Authentication represents the user that is currently logged on
-    public ResponseEntity<?> getCurrentUserDetails(Authentication authentication){
+    public ResponseEntity<?> getUserDetails(Authentication authentication){
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-        UserInfoResponse response = new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), roles);
+
+        UserInfoResponse response = new UserInfoResponse(userDetails.getId(),
+                userDetails.getUsername(), roles);
+
         return ResponseEntity.ok().body(response);
     }
 
@@ -155,6 +157,6 @@ public class AuthController {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,
                         cookie.toString())
-                .body(new MessageResponse("You have been signed out"));
+                .body(new MessageResponse("You've been signed out!"));
     }
 }

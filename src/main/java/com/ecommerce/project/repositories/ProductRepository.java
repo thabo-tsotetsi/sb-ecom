@@ -1,4 +1,4 @@
-package com.ecommerce.project.repository;
+package com.ecommerce.project.repositories;
 
 import com.ecommerce.project.model.Category;
 import com.ecommerce.project.model.Product;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Page<Product> findByCategoryOrderByPriceAsc(Category existingCategory, Pageable pageDetails);
+    Page<Product> findByCategoryOrderByPriceAsc(Category category, Pageable pageDetails);
 
     Page<Product> findByProductNameLikeIgnoreCase(String keyword, Pageable pageDetails);
 }

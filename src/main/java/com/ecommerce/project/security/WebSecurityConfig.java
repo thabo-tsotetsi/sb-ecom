@@ -3,8 +3,8 @@ package com.ecommerce.project.security;
 import com.ecommerce.project.model.AppRole;
 import com.ecommerce.project.model.Role;
 import com.ecommerce.project.model.User;
-import com.ecommerce.project.repository.RoleRepository;
-import com.ecommerce.project.repository.UserRepository;
+import com.ecommerce.project.repositories.RoleRepository;
+import com.ecommerce.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -47,7 +47,7 @@ public class WebSecurityConfig {
         return new AuthTokenFilter();
     }
 
-    //used to authenticate users
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -69,9 +69,10 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // We are disabling the csrf because jwt is stateless
         http.csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -96,7 +97,6 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    // below we are excluding the below urls from the security filter chain
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web -> web.ignoring().requestMatchers("/v2/api-docs",
@@ -107,7 +107,7 @@ public class WebSecurityConfig {
                 "/webjars/**"));
     }
 
-    // below bean is used to generate user data for testing
+
     @Bean
     public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
